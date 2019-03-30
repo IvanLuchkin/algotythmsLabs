@@ -2,6 +2,8 @@ public class IntroSort {
     /*
      * Class Variables
      */
+    public static int comparisons = 0;
+    public static int exchanges = 0;
     private static final int SIZE_THRESHOLD = 16;
     /*
      * Public interface
@@ -36,29 +38,40 @@ public class IntroSort {
             while (a[i] < x)
                 i++;
                 j -= 1;
+            comparisons++;
             while (x < a[j])
                 j -= 1;
+            comparisons++;
             if(!(i < j))
                 return i;
             exchange(a, i, j);
+            exchanges++;
+
             i++;
         }
     }
     private static int medianOfThree(int[] a, int lo, int mid, int hi) {
         if (a[mid] < a[lo]) {
-            if (a[hi] < a[mid])
+            if (a[hi] < a[mid]) {
+                comparisons++;
                 return a[mid];
+            }
             else {
-                if (a[hi] < a[lo])
+                if (a[hi] < a[lo]) {
+                    comparisons++;
                     return a[hi];
+                }
                 else
                     return a[lo];
             }
         }
         else {
             if (a[hi] < a[mid]) {
-                if (a[hi] < a[lo])
+                comparisons++;
+                if (a[hi] < a[lo]) {
+                    comparisons++;
                     return a[lo];
+                }
                 else
                     return a[hi];
             }
@@ -72,11 +85,14 @@ public class IntroSort {
     private static void heapSort(int[] a, int lo, int hi) {
         int n = hi - lo;
         for (int i = n / 2; i >= 1; i -= 1) {
+            comparisons++;
             downHeap(a, i, n, lo);
         }
         for (int i = n; i > 1; i -= 1) {
             exchange(a, lo, lo + i - 1);
             downHeap(a, 1, i - 1, lo);
+            comparisons++;
+            exchanges++;
         }
     }
     private static void downHeap(int[] a, int i, int n, int lo) {
@@ -86,10 +102,13 @@ public class IntroSort {
             child = 2 * i;
             if (child < n && a[lo + child - 1] < a[lo + child]) {
                 child++;
+                comparisons++;
             }
             if (d >= a[lo + child - 1]) break;
             a[lo + i - 1] = a[lo + child - 1];
             i = child;
+            comparisons++;
+            exchanges++;
         }
         a[lo + i - 1] = d;
     }
@@ -106,6 +125,8 @@ public class IntroSort {
             while(j != lo && t < a[j - 1]) {
                 a[j] = a[j - 1];
                 j--;
+                exchanges++;
+                comparisons++;
             }
             a[j] = t;
         }
